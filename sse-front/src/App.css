@@ -2,32 +2,60 @@
   text-align: center;
 }
 
+input {
+  margin: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
 button {
   margin: 10px;
   padding: 10px 20px;
   font-size: 16px;
 }
 
-.notifications {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
+.notification-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
 }
 
-.notification {
+.notification-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+.notification-list {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-item {
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
   margin: 10px 0;
-  width: 300px;
   text-align: left;
   position: relative;
-  transition: opacity 0.5s ease;
 }
 
-.notification button {
+.notification-item button {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -37,4 +65,60 @@ button {
   border-radius: 3px;
   cursor: pointer;
   padding: 5px;
+}
+
+.floating-notifications {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.floating-notification {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  width: 300px;
+  text-align: left;
+  opacity: 0;
+  animation: fadeInOut 5s forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.boards {
+  margin-top: 20px;
+}
+
+.boards ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.boards li {
+  background-color: #e0e0e0;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
 }
