@@ -5,18 +5,13 @@ import { FiBell } from 'react-icons/fi';
 interface Notification {
   id: number;
   message: string;
-}
-
-interface Board {
-  id: number;
-  name: string;
+  read: boolean;
 }
 
 const App: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [nextId, setNextId] = useState(1);
-  const [boardName, setBoardName] = useState('');
-  const [boards, setBoards] = useState<Board[]>([]);
+  const [newNotification, setNewNotification] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
@@ -26,6 +21,7 @@ const App: React.FC = () => {
       const newNotification: Notification = {
         id: nextId,
         message: event.data,
+        read: false
       };
       setNotifications(prevNotifications => [...prevNotifications, newNotification]);
       setNextId(prevId => prevId + 1);
@@ -46,60 +42,47 @@ const App: React.FC = () => {
     };
   }, [nextId]);
 
-  useEffect(() => {
-    // 게시판 목록 조회
-    const fetchBoards = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/boards');
-        const data = await response.json();
-        setBoards(data);
-      } catch (error) {
-        console.error('Error fetching boards:', error);
-      }
-    };
-
-    fetchBoards();
-  }, [notifications]);
-
-  const handleCloseNotification = (id: number) => {
-    setNotifications(prevNotifications => prevNotifications.filter(n => n.id !== id));
+  const handleBellClick = () => {
+    setShowNotifications(!showNotifications);
+    // 모든 알림을 읽음으로 표시
+    setNotifications(prevNotifications => prevNotifications.map(n => ({ ...n, read: true })));
   };
 
-  const handleCreateBoard = async () => {
-    try {
-      await fetch('http://localhost:8080/create-board', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(boardName),
-      });
-      setBoardName('');
-    } catch (error) {
-      console.error('Error creating board:', error);
+  const handleCreateNotification = () => {
+    if (newNotification.trim()) {
+      const notification = {
+        id: nextId,
+        message: newNotification,
+        read: false
+      };
+      setNotifications([...notifications, notification]);
+      setNextId(nextId + 1);
+      setNewNotification('');
     }
   };
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <div className="App">
       <h1>알림 메시지</h1>
       <input
         type="text"
-        value={boardName}
-        onChange={(e) => setBoardName(e.target.value)}
-        placeholder="게시판 이름"
+        value={newNotification}
+        onChange={(e) => setNewNotification(e.target.value)}
+        placeholder="새 알림 입력"
       />
-      <button onClick={handleCreateBoard}>게시판 생성</button>
-      <div className="notification-icon" onClick={() => setShowNotifications(!showNotifications)}>
+      <button onClick={handleCreateNotification}>알림 추가</button>
+      <div className="notification-icon" onClick={handleBellClick}>
         <FiBell size={24} />
-        {notifications.length > 0 && <span className="notification-count">{notifications.length}</span>}
+        {unreadCount > 0 && <span className="notification-count">{unreadCount}</span>}
       </div>
       {showNotifications && (
         <div className="notification-list">
+          <h2>알림 목록</h2>
           {notifications.map(notification => (
             <div key={notification.id} className="notification-item">
               <p>{notification.message}</p>
-              <button onClick={() => handleCloseNotification(notification.id)}>닫기</button>
             </div>
           ))}
         </div>
@@ -110,14 +93,6 @@ const App: React.FC = () => {
             <p>{notification.message}</p>
           </div>
         ))}
-      </div>
-      <div className="boards">
-        <h2>게시판 목록</h2>
-        <ul>
-          {boards.map(board => (
-            <li key={board.id}>{board.name}</li>
-          ))}
-        </ul>
       </div>
     </div>
   );

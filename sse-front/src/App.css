@@ -55,18 +55,6 @@ button {
   position: relative;
 }
 
-.notification-item button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  padding: 5px;
-}
-
 .floating-notifications {
   position: fixed;
   bottom: 20px;
@@ -105,20 +93,4 @@ button {
     opacity: 0;
     transform: translateY(20px);
   }
-}
-
-.boards {
-  margin-top: 20px;
-}
-
-.boards ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.boards li {
-  background-color: #e0e0e0;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
 }
