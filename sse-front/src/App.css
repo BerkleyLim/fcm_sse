@@ -55,6 +55,19 @@ button {
   position: relative;
 }
 
+.boards {
+  margin-top: 20px;
+}
+
+.board-item {
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  text-align: left;
+}
+
 .floating-notifications {
   position: fixed;
   bottom: 20px;
